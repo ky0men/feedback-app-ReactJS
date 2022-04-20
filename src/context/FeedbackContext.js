@@ -1,9 +1,20 @@
-import { createContext, useState } from "react";
-import feedbacks from "../data/FeedbackData";
+import { createContext, useEffect, useState } from "react";
+// import feedbacks from "../data/FeedbackData";
 
 const FeedbackContext = createContext();
 export const FeedbackProvider = ({ children }) => {
-  const [feedback, setFeedback] = useState(feedbacks);
+  useEffect(() => {
+    fetchFeedback();
+  }, []);
+
+  const fetchFeedback = async () => {
+    const response = await fetch("data/FeedbackData.json");
+    const data = await response.json();
+    console.log(data);
+    setFeedback(data.feedbacks);
+  };
+
+  const [feedback, setFeedback] = useState([]);
   const [editStatus, setEditStatus] = useState({
     item: {},
     edit: false,
